@@ -1,25 +1,66 @@
+* My Doom Emacs Configuration
+
+#+begin_src emacs-lisp
 ;; -*- lexical-binding: t; -*-
 (setq user-full-name "Russell Smith"
       user-mail-address "russell.smith7502@gmail.com")
+#+end_src
 
+** User Interface
+
+Gruvbox is the best
+
+#+begin_src emacs-lisp
 (setq doom-font (font-spec :family "JetBrainsMono Nerd Font Mono"
                            :size 13
                            :weight 'normal)
       doom-theme 'doom-gruvbox
       display-line-numbers-type t)
+#+end_src
 
+When using Emacs under WSL, the window never remembers its previous size, so
+maximize it by default.
+
+#+begin_src emacs-lisp
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
+#+end_src
 
+** General Editing
+
+Bind some useful commands, I use everywhere.
+
+#+begin_src emacs-lisp
 (map! "C-." 'avy-goto-char-timer ; bind Avy command
       "C-s" 'consult-line)       ; rebind Isearch to use Consult
+#+end_src
 
+Emacs provides hungry deletion commands, but only under the cc-mode package.
+
+#+begin_src emacs-lisp
 (use-package! cc-mode
   :bind
   (("C-x DEL" . c-hungry-delete-backwards)
    ("C-x C-d" . c-hungry-delete-forward)))
+#+end_src
 
+hl-line-mode can make lines with lots of overlays hard to read, so disable it by
+default.
+
+#+begin_src emacs-lisp
 (setq global-hl-line-modes nil)
+#+end_src
 
+** Whitespace
+
+Doom Emacs overrides the default whitespace-mode behavior to display errors,
+which is useful, but sometimes I want to use it to inspect the buffer's
+whitespace. This snippet allows me to toggle between three whitespace-mode
+behavior states: Doom's default, original behavior, and off.
+
+This is adapted from this post:
+https://www.reddit.com/r/DoomEmacs/comments/jl6p9x/whitespacemode/
+
+#+begin_src emacs-lisp
 (defun my-set-whitespace-defaults ()
   ;; Only save the values the first time we get here
   (unless (boundp 'my-default-whitespace-style)
@@ -57,7 +98,14 @@
          (whitespace-mode))))
 
 (global-set-key (kbd "C-<f4>") #'my-toggle-whitespace)
+#+end_src
 
+** Completion
+
+I had trouble disabling certain Corfu bindings. Company works fine, so use it
+for now.
+
+#+begin_src emacs-lisp
 (after! company
   (setq company-idle-delay 0.21
         company-show-quick-access t
@@ -66,20 +114,50 @@
   (map! :map company-active-map
         "C-n" nil
         "C-p" nil))
+#+end_src
 
+** Org Mode
+
+#+begin_src emacs-lisp
 (setq org-directory "~/org/")
+#+end_src
 
+Auto-Fill makes it easier to format
+
+#+begin_src emacs-lisp
 (add-hook! 'org-mode-hook (auto-fill-mode +1))
+#+end_src
 
+** Programming
+
+I use these modes in every programming language.
+
+#+begin_src emacs-lisp
 (add-hook! 'prog-mode-hook
   (rainbow-delimiters-mode-enable)
   (display-fill-column-indicator-mode))
+#+end_src
 
+Configure the tab key to always indent line to the correct indention.
+
+#+begin_src emacs-lisp
 (add-hook! 'prog-mode-hook (setq-local tab-always-indent t))
+#+end_src
 
+*** C/C++
+
+Set the default style to the Linux kernel's style, but use a 4 space indent.
+
+#+begin_src emacs-lisp
 (setq-hook! '(c-ts-mode-hook c++-ts-mode-hook)
   c-ts-mode-indent-style 'linux
   c-ts-mode-indent-offset 4)
+#+end_src
 
+Disable auto-formating by default. If I want to use clang-format, I configure
+that per project.
+
+#+begin_src emacs-lisp
 (add-to-list '+format-on-save-disabled-modes 'c++-ts-mode)
 (add-to-list '+format-on-save-disabled-modes 'c-ts-mode)
+#+end_src
