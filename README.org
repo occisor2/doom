@@ -347,12 +347,6 @@ Set the default style to the Linux kernel's style, but use a 4 space indent.
   c-ts-mode-indent-offset 4)
 #+end_src
 
-Currently the treesitter grammar has a bug, so I am running an old version.
-
-#+begin_src emacs-lisp
-
-#+end_src
-
 Disable auto-formatting by default. If I want to use clang-format, I configure that per project.
 
 #+begin_src emacs-lisp
