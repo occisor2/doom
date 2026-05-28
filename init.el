@@ -22,7 +22,7 @@
 
        :completion
        ;;(company +childframe)           ; the ultimate code completion backend
-       ;;(corfu +orderless +icons +dabbrev)  ; complete with cap(f), cape and a flying feather!
+       (corfu +orderless +icons +dabbrev)  ; complete with cap(f), cape and a flying feather!
        (vertico +icons)    ; the search engine of the future
 
        :ui
@@ -151,7 +151,7 @@
        ;;nim               ; python + lisp at the speed of c
        ;;nix               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
-       org               ; organize your plain life in plain text
+       (org +roam)               ; organize your plain life in plain text
        ;;php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
        ;;graphviz          ; diagrams for confusing yourself even more
@@ -192,5 +192,5 @@
        (default +bindings +smartparens)
 
        :personal
-       (auto-complete)
+       ;;(auto-complete)
        (whitespace +guess +trim))

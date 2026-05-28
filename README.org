@@ -296,7 +296,7 @@ By default it is not obvious where the cursor is sitting within stylized text. /
 
 *** Completion
 #+begin_src emacs-lisp
-(when (modulep! :personal auto-complete)
+(when (modulep! :completion corfu)
   (setq-hook! org-mode
     completion-at-point-functions
     (list #'cape-file
@@ -332,7 +332,10 @@ Often in projects using the iter macro from the Iterate package, Sly runs into i
 
 #+begin_src emacs-lisp
 (after! sly
-  (put 'iter 'common-lisp-indent-function 0))
+  (put 'iter 'common-lisp-indent-function 0)
+  (advice-add #'sly-simple-complete-symbol :around #'cape-wrap-sort)
+  (after! orderless
+    (setq-hook! 'sly-mode-hook completion-styles '(basic partial-completion emacs22))))
 #+end_src
 
 *** C/C++
@@ -344,7 +347,13 @@ Set the default style to the Linux kernel's style, but use a 4 space indent.
   c-ts-mode-indent-offset 4)
 #+end_src
 
-Disable auto-formating by default. If I want to use clang-format, I configure that per project.
+Currently the treesitter grammar has a bug, so I am running an old version.
+
+#+begin_src emacs-lisp
+
+#+end_src
+
+Disable auto-formatting by default. If I want to use clang-format, I configure that per project.
 
 #+begin_src emacs-lisp
 (add-to-list '+format-on-save-disabled-modes 'c++-ts-mode)
